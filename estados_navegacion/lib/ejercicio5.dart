@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-
 import 'package:provider/provider.dart';
-
 
 void main() {
   runApp( ChangeNotifierProvider(
@@ -9,6 +7,37 @@ void main() {
       child: const MyApp(),
     ),
   );
+}
+
+
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = context.watch<ThemeNotifier>().isDark;
+    final toggleTheme = context.read<ThemeNotifier>().toggleTheme;
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Tema claro/oscuro',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Color(0xFF0455BF),
+          brightness: Brightness.light,
+        ),
+      ),
+      darkTheme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Color(0xFF0455BF),
+          brightness: Brightness.dark,
+        ),
+      ),
+      themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
+
+      home: HomePage(),
+    );
+  }
 }
 
 class ThemeNotifier extends ChangeNotifier {
@@ -22,40 +51,6 @@ class ThemeNotifier extends ChangeNotifier {
     notifyListeners();
   }
 }
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final isDark = context.watch<ThemeNotifier>().isDark;
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Tema claro/oscuro',
-      initialRoute: '/',
-      routes: {
-        '/' : (_) => const HomePage(),
-        '/pantalla2': (_) => const Pantalla2(),
-      },
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Color(0xFF0455BF),
-          brightness: Brightness.light,
-        ),
-      ),
-      darkTheme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Color(0xFF0455BF),
-          brightness: Brightness.dark,
-        ),
-      ),
-      themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
-    );
-  }
-}
-
-
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});  
@@ -77,7 +72,13 @@ class HomePage extends StatelessWidget {
             SizedBox(height: 15),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/pantalla2');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        Pagina2(),
+                  ),
+                );
               },
               child: Text('Ir a pantalla B'),
             ),
@@ -93,9 +94,9 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class Pantalla2 extends StatelessWidget {
+class Pagina2 extends StatelessWidget {
 
-  const Pantalla2({super.key});
+  const Pagina2({super.key});
 
   @override
   Widget build(BuildContext context) {
